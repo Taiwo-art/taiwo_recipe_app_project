@@ -2,10 +2,11 @@ import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema(
   {
-    userName: {
+    fullName: {
       type: String,
       required: true,
       unique: true,
+      trim:true,
     },
     
     email: 
@@ -13,6 +14,8 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
+        trim: true,
       },
 
     password: {
@@ -22,8 +25,10 @@ const userSchema = new mongoose.Schema(
 
     role: {
         type: String,
-        enum: ["regualar", "professional"],
-        required: true,}, 
+        enum: ["regular", "professional"],
+        required: true,
+        default:"regular",
+      }, 
 
     isAdmin: {
       type: Boolean ,
@@ -35,6 +40,4 @@ const userSchema = new mongoose.Schema(
     }
 )
 
-
-
-export const user = mongoose.model("user", userSchema)
+export const User = mongoose.model("User", userSchema)
