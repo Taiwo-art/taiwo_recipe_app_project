@@ -1,8 +1,8 @@
-import {User} from "../models/userModel.js"
 import jwt from "jsonwebtoken"
+import {User} from "../models/userModel.js"
 
 
-export const verifyToken = async(req,res, next) => {
+export const verifyToken = async(req, res, next) => {
 
     let token;
 
@@ -25,6 +25,24 @@ export const verifyToken = async(req,res, next) => {
 
     if (!token){
         res.status(401);
-        throw new Error(`Message: Not Authorized`);
+        throw new Error(`Message: User not Authorized!`);
+    }
+}
+
+export const profUser = async (req,res,next) => {
+if (req.user && req.user.role === "professional"){
+    next()
+} else {
+    res.status(401);
+    throw new Error("User Not Authorized")
+
+}
+}
+export const adminUser = async(req,res,next) => {
+    if (req.user && req.user.isAdmin) {
+        next()
+    } else{
+    res.status(401);
+    throw new Error("User Not Authorized");
     }
 }

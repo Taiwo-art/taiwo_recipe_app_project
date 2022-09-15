@@ -1,18 +1,48 @@
 import express from "express"
 import mongoose from "mongoose";
 import {recipe} from "../models/recipeModel.js"
+import {generateToken} from "../utils/util.js"
 
 
 //Create a new recipe
 export const createRecipe = async(req, res) => {
     try {
-        const recip = new recipe(req.body); 
+        const {recipeName,ingredients,duration,description,photo,comments,rating,similarRecipe,tag,likes,likeCount} = req.body; 
 
-        await recip.save();
-        res.send(recip)
+        const newRecipe = await recipe.create({
+    recipeName,
+    ingredients,
+    duration,
+    description,
+    photo,
+    comments,
+    rating,
+    similarRecipe,
+    tag,
+    likes,
+    likeCount
+        });
+         if (newRecipe) {
+            res.status(200).json({
+                _id: newRecipe._id,
+                recipeName:newRecipe.recipeName,
+                author: req.user.username,
+                tag:newRecipe.tag,
+                ingredients:newRecipe.ingredients,
+                duration:newRecipe.duration,
+                description:newRecipe.description,
+                photo:newRecipe.photo,
+                comments:newRecipe.comments,
+                rating:newRecipe.rating,
+                similarRecipe:newRecipe.similarRecipe,
+                likes:newRecipe.likes,
+                likeCount:newRecipe.likeCount,
+                token:generateToken(newRecipe._id),
+            })
+        } 
     } catch (error) {
         console.error(error.message);
-    }
+}
 }
 //Get all recipes from database
 export const getAllRecipes = async(req,res) => {
@@ -65,7 +95,7 @@ export const getRecipe = async(req, res) => {
         })
         if (recip) {
             res.status(200).json({
-                message:"Organization updated successfully",
+                message:"Recipe updated successfully",
                 data: recip
             });
         }
