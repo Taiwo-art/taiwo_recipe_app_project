@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv"
 import {connectDB} from "./config/db.js"
-import createRecipe from "./routes/recipeRoutes.js"
+import recipeRoutes from "./routes/recipeRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 
 
 dotenv.config()
@@ -18,7 +19,8 @@ app.get('/', (req,res) => {
     res.send(`Hello world!`)
 })
 
-app.use("/recipe", createRecipe);
+app.use("/recipe", recipeRoutes);
+app.use("/user",userRoutes)
 
 
 app.listen(port, () => {
